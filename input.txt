@@ -1,0 +1,6 @@
+push a
+push 5
+bind
+push 5
+push a
+mul
