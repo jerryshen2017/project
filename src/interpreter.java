@@ -1,5 +1,4 @@
 import java.io.File;
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -17,19 +16,22 @@ public class interpreter {
 	
 public static void interpreter(String input,String output) throws IOException 
 {
+	 HashMap<String,String> map1 = new HashMap<String,String>();
+	 HashMap<String,String> map2 = new HashMap<String,String>();
 	
 	Scanner x;
 	x = new Scanner(new File(input));
 	String operation;
+    
+    
     Stack<String> myStack = new Stack<String>();
+    Stack<String> stack3 = new Stack<String>();
     
-    HashMap<String,String> map1 = new HashMap<String,String>();
-    HashMap<String,String> map2 = new HashMap<String,String>();
-    
-    int countLet = 0;
+   
+    int countLet = 0; // the occurrnece of string let
     int countLet1 = 0;
-    int countEnd = 0;
-    int countMap = 0;
+    int countEnd = 0;  // occurrence of string end
+    int countMap = 0; 
     
     
     ArrayList<HashMap<String,String>> list2 = new ArrayList<HashMap<String,String>>();
@@ -41,13 +43,28 @@ public static void interpreter(String input,String output) throws IOException
     list.add(myStack);
     
     
+    ArrayList<String> list4 = new ArrayList<String>();
+    
+    ArrayList<String> list3 = new ArrayList<String>();
+    //This arraylist keeps track of the function input. 
+    
     while(x.hasNext())
 	{
+		 String a = x.next();
+		 list4.add(a);
 		 
+		 
+	}
+    System.out.println(list4);
+    
+    
+    //Reading of the file starts here.....
+		for( int i = 0; i < list4.size();i++)
+		{
 		
-		String a = x.next();
-		
-		
+		   String a = list4.get(i);
+		   
+		   
 	
 		if(a.equals(":error:"))
 		{
@@ -66,12 +83,34 @@ public static void interpreter(String input,String output) throws IOException
 		
 		else if(a.equals("push"))
 		{
+		System.out.println("Now that we hit and executed a push command");
+		 String b = list4.get(i+1);
+		 //stack3.push(b);
+		 
+		 //System.out.println("String b is: " + b);
+		// Part3 edition goes here. 
+		/*if(list3.size() > 0)
+	{
+			  System.out.println(list3);
+		for( int i =0 ; i < list3.size();i++)
+		{
+			if(list3.get(i).equals("x"))
+			{
+				list3.remove(list3.get(i));
+				list3.add(i, b);
+				
+			 }
+			
+		 }   //This corresponds to the for loop above. 
+		//System.out.println("After execution of for loop at position 1 we have: " + list3.get(1));
+		//System.out.println("After execution of for loop at position 3 we have: " + list3.get(3));
 		
-		 String b = x.next();
 		
+	}  */
 	  if(Character.isLetter(b.charAt(0)))
 		{
 			list.get(countLet).push(b);
+			
 		}
 		
 		else if(b.matches("[0-9]+") && Integer.parseInt(b) > 0)
@@ -103,10 +142,11 @@ public static void interpreter(String input,String output) throws IOException
 			if(b.charAt(b.length()-1) == '"')
 			{
 				 list.get(countLet).push(b);
+				
 			}
 			
 			
-			else if(b.charAt(b.length()-1) != '"')
+			/*else if(b.charAt(b.length()-1) != '"')
 			{
 				String c = x.next();
 				if(c.charAt(c.length()-1) == '"')
@@ -154,12 +194,11 @@ public static void interpreter(String input,String output) throws IOException
 				} 
 			} 
 				
-			} 
+			} */
 		
 			//System.out.println(b.substring(1,b.length()-1));
 		
-		}
-		else {
+		}else {
 		    list.get(countLet).push(":error:");
 		     
 		}
@@ -171,7 +210,17 @@ public static void interpreter(String input,String output) throws IOException
 		// Now Im officially done with addition. 
 		else if(a.equals("add"))
 		{
-			
+			/*
+		    if(stack3.size() >= 2)
+		    {
+		    	String m = stack3.peek();
+		    	stack3.pop();
+		    	String v = stack3.peek();
+		    	String q = Integer.toString(Integer.parseInt(m) + Integer.parseInt(v));
+		    	stack3.push(q);
+		    	
+		    	
+		    } */
 		     if(list.get(countLet).size() == 1 || list.get(countLet).size() == 0)
 		     {
 					list.get(countLet).push(":error:");
@@ -1345,7 +1394,8 @@ else if(a.equals("neg"))
 			
 		
 		}
-		else if(a.equals("if")){
+		else if(a.equals("if"))
+		{
 			if(list.get(countLet).size() == 0 || list.get(countLet).size() < 3)
 			{
 				list.get(countLet).push(":error:");
@@ -1522,17 +1572,83 @@ else if(a.equals("neg"))
 			     }
 		 }    // This marks the end of the first end 
 		
-		
-		
-		
-						
+		else if(a.equals("fun"))
+		{
 			
+			for( int j = i; j < list4.size();j++)
+			{
+				String b = list4.get(j);
+				System.out.println("String b is: " + b);
+				list3.add(b);
+				if(b.equals("funEnd"))
+				{
+					System.out.println("Now that we hit the end of this list");
+					int temp = i;
+					i = j;
+					j = temp;
+					
+					break;
+					
+				}
+			
+			}
+			
+			System.out.println(list3);
+			}
+			
+		//Makre sure elements are being dumped onto list 3. 
+		else if(a.equals("call"))
+		{
+			 
+			 String b = list.get(countLet).peek();
+			 if( b.equals(list3.get(1)) )
+				 
+			 {
+				 System.out.println(b + " is equal to: " + list3.get(1));
+			 list.get(countLet).pop();
+			 String c = list.get(countLet).peek();
+			 //This is the second element from the stack. 
+			 System.out.println("String c is: " + c);
+			 String d = list3.get(2);
+			 
+			for(int z = 0; z < list3.size(); z++)
+			{
+				
+				if(list3.get(z).equals(d))
+				{
+					
+					list3.remove(list3.get(z));
+					list3.add(z,c);
+					
+					
+				}
+				
+				
+				
+			}
+			 }
+			 
+			System.out.println(list3);
+			// Now that list3 has being completed constructed. 
+		}
+		
+		
+		
+		
+		
+		
+		
 
-			
-			
- 
+} //This is the after the for loop. 
 		
-} 
+		
+	
+		
+		
+		
+		
+		
+ 
  	
 	// This curly brace is related to the top while loop that deals with reading the file and all other functions has nothing to do with this function.  
 	  
@@ -1568,9 +1684,11 @@ else if(a.equals("neg"))
 		e.printStackTrace();
 	}
 	
-	x.close();
+	x.close(); 
 	  
- }
+ 
+
+}  // This marks the end of the method. 
  
 
  

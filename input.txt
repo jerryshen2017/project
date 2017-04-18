@@ -1,6 +1,12 @@
+fun identity x
+push x
+return
+funEnd
+
 push a
-push 5
+push 3
 bind
-push 5
 push a
-mul
+push identity
+call
+
