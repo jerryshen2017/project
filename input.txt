@@ -1,12 +1,18 @@
-fun identity x
+inOutFun addOne x
+push x
+push x
+push 1
+add
+bind
 push x
 return
 funEnd
-
 push a
-push 3
+push 1
 bind
 push a
-push identity
+push addOne
 call
-
+push a
+push 1
+add
